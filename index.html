@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>專案資訊流程圖 - exam21_notemaker</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 4px solid #ffd700;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #ddd;
+            overflow-x: auto;
+            flex-wrap: wrap;
+        }
+
+        .tab-button {
+            padding: 15px 25px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+            white-space: nowrap;
+        }
+
+        .tab-button:hover {
+            color: #667eea;
+            background: #f0f0f0;
+        }
+
+        .tab-button.active {
+            color: #667eea;
+            border-bottom-color: #667eea;
+            background: white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            border: 1px solid #eee;
+        }
+
+        .diagram-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0 20px 0;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .diagram-description {
+            background: #e8f4f8;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            line-height: 1.6;
+        }
+
+        .decision-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 30px 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .decision-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .decision-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .decision-table tr:hover {
+            background: #f9f9f9;
+        }
+
+        .decision-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .flow-summary {
+            background: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+            line-height: 1.8;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            font-size: 0.95em;
+        }
+
+        .step-box {
+            background: #fff9e6;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #ffd700;
+            border-radius: 4px;
+        }
+
+        .step-box strong {
+            color: #d4a800;
+        }
+
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            border: 1px solid #999;
+        }
+
+        .info-box {
+            background: #e8f5e9;
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .warning-box {
+            background: #fff3e0;
+            padding: 15px;
+            border-left: 4px solid #ff9800;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .success-box {
+            background: #c8e6c9;
+            padding: 15px;
+            border-left: 4px solid #4caf50;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .tab-button {
+                padding: 12px 15px;
+                font-size: 0.9em;
+            }
+
+            .tab-content {
+                padding: 20px;
+            }
+
+            .decision-table {
+                font-size: 0.9em;
+            }
+
+            .decision-table th,
+            .decision-table td {
+                padding: 10px;
+            }
+        }
+
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+            font-size: 24px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .back-to-top:hover {
+            background: #764ba2;
+            transform: translateY(-5px);
+        }
+
+        .back-to-top.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 專案資訊流程圖</h1>
+            <p>exam21_notemaker - 完整系統資訊流、決策邏輯與數據轉換圖表</p>
+            <p style="font-size: 0.9em; margin-top: 10px;">✅ 6 大流程圖 | 包含判斷邏輯 | 最後更新: 2025-11-26</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-button active" onclick="switchTab(0)">📋 總覽</button>
+            <button class="tab-button" onclick="switchTab(1)">🚀 主入口</button>
+            <button class="tab-button" onclick="switchTab(2)">📥 數據判斷</button>
+            <button class="tab-button" onclick="switchTab(3)">⚙️ 預處理</button>
+            <button class="tab-button" onclick="switchTab(4)">🧠 分析生成</button>
+            <button class="tab-button" onclick="switchTab(5)">🔍 QA 驗證</button>
+            <button class="tab-button" onclick="switchTab(6)">🔄 完整流程</button>
+            <button class="tab-button" onclick="switchTab(7)">📈 決策表</button>
+        </div>
+
+        <!-- Tab 0: 總覽 -->
+        <div class="tab-content active">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📊 系統總覽</h2>
+
+            <div class="info-box">
+                <strong>🎯 核心目標</strong><br>
+                AI 驅動智能筆記生成系統 - 逐字稿/網頁/PDF → 結構化深度筆記
+            </div>
+
+            <h3 class="diagram-title">🌟 系統 6 大流程圖</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #90EE90;"></div>
+                    <span><strong>流程 1</strong>: 系統主入口 (6 個選擇點)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #87CEEB;"></div>
+                    <span><strong>流程 2</strong>: 數據來源判斷 (格式檢測)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFB6C1;"></div>
+                    <span><strong>流程 3</strong>: 智能預處理 (混合模式)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFD700;"></div>
+                    <span><strong>流程 4</strong>: 分析與生成 (核心處理)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FF69B4;"></div>
+                    <span><strong>流程 5</strong>: HackMD QA (三層驗證)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #00FF00;"></div>
+                    <span><strong>流程 6</strong>: 完整端到端 (全系統流)</span>
+                </div>
+            </div>
+
+            <h3 class="diagram-title">📊 流程圖色碼說明</h3>
+            <div class="legend">
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #90EE90;"></div>
+                    <span>成功/開始</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #87CEEB;"></div>
+                    <span>數據/輸入</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFD700;"></div>
+                    <span>決策點</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFB6C1;"></div>
+                    <span>處理步驟</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFA500;"></div>
+                    <span>警告/備選</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #FFB6B6;"></div>
+                    <span>錯誤/退出</span>
+                </div>
+            </div>
+
+            <h3 class="diagram-title">🎯 快速導航</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 15px;">
+                <div class="step-box">
+                    <strong>▶ 流程 1 - 系統主入口</strong><br>
+                    查看 run.sh 的 6 個功能選擇點
+                </div>
+                <div class="step-box">
+                    <strong>▶ 流程 2 - 數據來源判斷</strong><br>
+                    自動識別逐字稿/PDF/網頁/YouTube
+                </div>
+                <div class="step-box">
+                    <strong>▶ 流程 3 - 智能預處理</strong><br>
+                    BS4 vs Playwright 自動決策
+                </div>
+                <div class="step-box">
+                    <strong>▶ 流程 4 - 分析與生成</strong><br>
+                    Gemini API 調用與圖片處理
+                </div>
+                <div class="step-box">
+                    <strong>▶ 流程 5 - QA 驗證</strong><br>
+                    三層 HackMD 相容性驗證
+                </div>
+                <div class="step-box">
+                    <strong>▶ 流程 6 - 完整端到端</strong><br>
+                    整合所有決策與流程
+                </div>
+            </div>
+
+            <h3 class="diagram-title">📈 系統統計</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>指標</th>
+                    <th>數值</th>
+                    <th>說明</th>
+                </tr>
+                <tr>
+                    <td><strong>流程圖數量</strong></td>
+                    <td>6 個</td>
+                    <td>涵蓋整個系統流程</td>
+                </tr>
+                <tr>
+                    <td><strong>決策點總數</strong></td>
+                    <td>20+ 個</td>
+                    <td>包含所有分支邏輯</td>
+                </tr>
+                <tr>
+                    <td><strong>主要入口點</strong></td>
+                    <td>6 個</td>
+                    <td>run.sh 選項 1-6</td>
+                </tr>
+                <tr>
+                    <td><strong>數據類型</strong></td>
+                    <td>4 種</td>
+                    <td>逐字稿、PDF、網頁、YouTube</td>
+                </tr>
+                <tr>
+                    <td><strong>QA 驗證層</strong></td>
+                    <td>3 層</td>
+                    <td>預防→檢測→修復</td>
+                </tr>
+                <tr>
+                    <td><strong>自動化決策</strong></td>
+                    <td>8 項</td>
+                    <td>BS4/PW、圖片處理等</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Tab 1: 主入口 -->
+        <div class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🚀 系統主入口流程圖</h2>
+
+            <div class="diagram-description">
+                <strong>📌 說明</strong>: 展示 run.sh 的 6 個主功能選擇路徑，以及每個選擇對應的子流程
+            </div>
+
+            <div class="mermaid">
+graph TD
+    Start([使用者執行 run.sh]) --> Menu[主選單]
+
+    Menu --> Opt1[1. 逐字稿筆記生成]
+    Menu --> Opt2[2. YouTube 下載與轉換]
+    Menu --> Opt3[3. 網頁分析]
+    Menu --> Opt4[4. PDF 深度分析]
+    Menu --> Opt5[5. 清理與備份]
+    Menu --> Opt6[6. 結束程式]
+
+    Opt1 --> Mode1A[單檔案模式<br/>generator.py]
+    Opt1 --> Mode1B[批次模式<br/>chunked_generator.py]
+
+    Opt2 --> Mode2[YouTube 字幕下載<br/>youtube_downloader.py]
+
+    Opt3 --> Mode3A[靜態網頁<br/>BeautifulSoup]
+    Opt3 --> Mode3B[動態網頁<br/>Playwright]
+    Opt3 --> Mode3C[自動偵測<br/>web_preprocessor_hybrid.py]
+
+    Opt4 --> Mode4A[原文版<br/>Docling 解析]
+    Opt4 --> Mode4B[翻譯版<br/>Docling + 翻譯]
+    Opt4 --> Mode4C[深度分析<br/>OEM + RICE]
+
+    Opt5 --> Mode5A[掃描<br/>--scan]
+    Opt5 --> Mode5B[預覽<br/>--dry-run]
+    Opt5 --> Mode5C[執行<br/>--execute]
+    Opt5 --> Mode5D[互動式<br/>--interactive]
+    Opt5 --> Mode5E[備份管理<br/>--list / --rollback]
+
+    Mode1A --> Next1[進入資訊流程]
+    Mode1B --> Next1
+    Mode2 --> Next1
+    Mode3A --> Next1
+    Mode3B --> Next1
+    Mode3C --> Next1
+    Mode4A --> Next1
+    Mode4B --> Next1
+    Mode4C --> Next1
+
+    Mode5A --> End([程式結束])
+    Mode5B --> End
+    Mode5C --> End
+    Mode5D --> End
+    Mode5E --> End
+
+    style Start fill:#90EE90
+    style Menu fill:#87CEEB
+    style Opt1 fill:#FFB6C1
+    style Opt2 fill:#FFB6C1
+    style Opt3 fill:#FFB6C1
+    style Opt4 fill:#FFB6C1
+    style Opt5 fill:#FFFFE0
+    style Opt6 fill:#FFB6B6
+    style End fill:#FFB6B6
+            </div>
+
+            <h3 class="diagram-title">🎯 功能說明</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>選項</th>
+                    <th>功能</th>
+                    <th>子選項</th>
+                    <th>執行模組</th>
+                </tr>
+                <tr>
+                    <td><strong>1</strong></td>
+                    <td>逐字稿筆記生成</td>
+                    <td>單檔案 / 批次</td>
+                    <td>generator.py / chunked_generator.py</td>
+                </tr>
+                <tr>
+                    <td><strong>2</strong></td>
+                    <td>YouTube 下載 + 轉換</td>
+                    <td>N/A</td>
+                    <td>youtube_downloader.py</td>
+                </tr>
+                <tr>
+                    <td><strong>3</strong></td>
+                    <td>網頁分析</td>
+                    <td>靜態 / 動態 / 自動</td>
+                    <td>web_preprocessor_hybrid.py</td>
+                </tr>
+                <tr>
+                    <td><strong>4</strong></td>
+                    <td>PDF 深度分析</td>
+                    <td>原文 / 翻譯 / 深度</td>
+                    <td>pdf_article_main.py</td>
+                </tr>
+                <tr>
+                    <td><strong>5</strong></td>
+                    <td>清理/備份</td>
+                    <td>掃描/預覽/執行/互動/備份</td>
+                    <td>cleanup_engine.py</td>
+                </tr>
+                <tr>
+                    <td><strong>6</strong></td>
+                    <td>退出</td>
+                    <td>N/A</td>
+                    <td>N/A</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Tab 2: 數據判斷 -->
+        <div class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📥 數據來源判斷流程圖</h2>
+
+            <div class="diagram-description">
+                <strong>📌 說明</strong>: 自動檢測與驗證輸入數據類型（文件 vs URL、副檔名、可訪問性等）
+            </div>
+
+            <div class="mermaid">
+graph TD
+    Input["📥 使用者輸入<br/>檔案或 URL"] --> Detect{"檢測輸入類型"}
+
+    Detect -->|文件路徑| FileCheck{"檢查副檔名"}
+    FileCheck -->|.txt/.md/.srt| Transcript["📝 逐字稿檔案<br/>Transcript"]
+    FileCheck -->|.pdf| PDF["📄 PDF 檔案<br/>PDF Document"]
+    FileCheck -->|其他| Error1["❌ 不支援的格式<br/>退出或重試"]
+
+    Detect -->|URL| URLCheck{"判斷 URL 類型"}
+    URLCheck -->|YouTube 連結| YT["🎥 YouTube URL<br/>下載字幕→逐字稿"]
+    URLCheck -->|網站 URL| Web["🌐 網站 URL<br/>Web Article"]
+    URLCheck -->|其他| Error2["❌ 無效 URL<br/>退出或重試"]
+
+    Transcript --> HasContent{"檔案是否<br/>有內容?"}
+    HasContent -->|是| TID["✅ 逐字稿<br/>識別完成"]
+    HasContent -->|否| Error3["❌ 空檔案<br/>退出或重試"]
+
+    PDF --> HasPages{"PDF 是否<br/>可讀?"}
+    HasPages -->|是| PID["✅ PDF<br/>識別完成"]
+    HasPages -->|否| Error4["❌ PDF 損壞<br/>退出或重試"]
+
+    YT --> Download["⬇️ 下載 YouTube<br/>字幕 zh-TW/en"]
+    Download --> YTResult{"字幕<br/>下載成功?"}
+    YTResult -->|是| YTTranscript["✅ YouTube<br/>逐字稿<br/>識別完成"]
+    YTResult -->|否| Error5["❌ 字幕取得失敗<br/>退出或重試"]
+
+    Web --> AccessCheck{"網頁是否<br/>可訪問?"}
+    AccessCheck -->|是| WID["✅ 網頁<br/>識別完成"]
+    AccessCheck -->|否| Error6["❌ 無法訪問<br/>檢查連線"]
+
+    TID --> Next["↓ 進入預處理<br/>流程"]
+    PID --> Next
+    YTTranscript --> Next
+    WID --> Next
+
+    Error1 --> Retry{"重試?"}
+    Error2 --> Retry
+    Error3 --> Retry
+    Error4 --> Retry
+    Error5 --> Retry
+    Error6 --> Retry
+
+    Retry -->|是| Input
+    Retry -->|否| End1["🛑 結束"]
+
+    style Input fill:#87CEEB
+    style Detect fill:#FFD700
+    style Transcript fill:#90EE90
+    style PDF fill:#90EE90
+    style YT fill:#90EE90
+    style Web fill:#90EE90
+    style TID fill:#00FF00
+    style PID fill:#00FF00
+    style YTTranscript fill:#00FF00
+    style WID fill:#00FF00
+    style Error1 fill:#FFB6B6
+    style Error2 fill:#FFB6B6
+    style Error3 fill:#FFB6B6
+    style Error4 fill:#FFB6B6
+    style Error5 fill:#FFB6B6
+    style Error6 fill:#FFB6B6
+            </div>
+
+            <h3 class="diagram-title">🔍 決策邏輯</h3>
+            <ol style="line-height: 2;">
+                <li><strong>輸入類型檢測</strong>: 判斷是檔案路徑還是 URL</li>
+                <li><strong>格式驗證</strong>: 檢查副檔名 (.txt/.md/.srt/.pdf) 或 URL 類型</li>
+                <li><strong>內容驗證</strong>: 確保有實際內容 (非空、可讀、可訪問)</li>
+                <li><strong>錯誤處理</strong>: 失敗時提供重試選項</li>
+                <li><strong>下載流程</strong>: YouTube 字幕自動下載並轉換為逐字稿格式</li>
+            </ol>
+        </div>
+
+        <!-- Tab 3: 預處理 -->
+        <div class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">⚙️ 智能預處理判斷流程圖</h2>
+
+            <div class="diagram-description">
+                <strong>📌 說明</strong>: 根據數據類型選擇預處理器，特別是網頁的混合模式決策 (BS4 vs Playwright)
+            </div>
+
+            <div class="mermaid">
+graph TD
+    Data["✅ 識別完成的數據<br/>逐字稿/PDF/網頁/YouTube"] --> Router{"數據來源"}
+
+    Router -->|逐字稿| TProcess["📝 逐字稿預處理<br/>transcript_cleaner.py"]
+    Router -->|PDF| PProcess["📄 PDF 預處理<br/>pdf_preprocessor_docling.py"]
+    Router -->|網頁/YouTube| WProcess["🌐 網頁預處理<br/>web_preprocessor_hybrid.py"]
+
+    TProcess --> TClean["清理步驟:<br/>• 移除時間戳<br/>• 移除序號<br/>• 標註發言者<br/>• 移除贅詞<br/>• 修正專有名詞"]
+    TClean --> TOutput["📤 輸出<br/>清理過的逐字稿"]
+
+    PProcess --> PDecision{"選擇 PDF<br/>處理模式"}
+    PDecision -->|原文版| PMode1["解析 PDF 結構<br/>保留所有內容"]
+    PDecision -->|翻譯版| PMode2["解析 PDF 結構<br/>+ Google Translate"]
+    PDecision -->|深度分析| PMode3["完整解析<br/>提取圖片"]
+
+    PMode1 --> POutput["📤 輸出<br/>Markdown 原文"]
+    PMode2 --> POutput
+    PMode3 --> POutput
+
+    WProcess --> HybridDetect{"自動偵測<br/>網頁類型"}
+
+    HybridDetect -->|靜態信號<br/>檢測到| BS4Path["⚡ BeautifulSoup<br/>快速路徑<br/>&lt;50ms"]
+    HybridDetect -->|動態信號<br/>檢測到| PlaywrightPath["🎭 Playwright<br/>完整渲染<br/>2-5 秒"]
+    HybridDetect -->|無法判定| ConfigCheck{"config.py<br/>設定"}
+
+    ConfigCheck -->|禁用 Playwright| BS4Path
+    ConfigCheck -->|啟用自動切換| SmartSwitch["智能策略:<br/>先嘗試 BS4<br/>失敗則切換 PW"]
+
+    SmartSwitch --> TryBS4{"BS4 提取<br/>成功?"}
+    TryBS4 -->|是,內容 80%| BS4Success["✅ BS4 足夠<br/>使用快速路徑"]
+    TryBS4 -->|否,內容不完整| PWFallback["🎭 切換 Playwright<br/>進行完整渲染"]
+
+    BS4Path --> ExtractBS4["提取內容:<br/>• 標題<br/>• 正文<br/>• 圖片 URL<br/>• 結構化數據"]
+
+    PlaywrightPath --> ExtractPW["提取內容:<br/>• 動態渲染結果<br/>• JavaScript 執行結果<br/>• 完整 DOM"]
+
+    PWFallback --> ExtractPW
+
+    BS4Success --> ExtractBS4
+
+    ExtractBS4 --> CleanWeb["清理步驟:<br/>• 移除廣告<br/>• 移除導航<br/>• 標準化格式<br/>• 圖片路徑修復"]
+
+    ExtractPW --> CleanWeb
+
+    CleanWeb --> WOutput["📤 輸出<br/>Cleaned HTML/Markdown"]
+
+    TOutput --> Next["↓ 進入分析流程"]
+    POutput --> Next
+    WOutput --> Next
+
+    style Data fill:#87CEEB
+    style Router fill:#FFD700
+    style TProcess fill:#FFB6C1
+    style PProcess fill:#FFB6C1
+    style WProcess fill:#FFB6C1
+    style HybridDetect fill:#FFD700
+    style BS4Path fill:#90EE90
+    style PlaywrightPath fill:#90EE90
+    style BS4Success fill:#00FF00
+    style PWFallback fill:#FFA500
+            </div>
+
+            <h3 class="diagram-title">🔍 核心決策邏輯</h3>
+            <div class="step-box">
+                <strong>網頁預處理混合模式選擇</strong><br><br>
+                1. 檢測網頁特徵 (React/Vue/Next.js 框架信號)
+                <br>2. 靜態網頁 → BeautifulSoup (快速)
+                <br>3. 動態網頁 → Playwright (完整)
+                <br>4. 無法判定 → 查詢 config.py 設定
+                <br>5. 自動切換模式 → 先 BS4, 失敗則 Playwright
+            </div>
+
+            <h3 class="diagram-title">⏱️ 性能對比</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>預處理器</th>
+                    <th>執行時間</th>
+                    <th>適用場景</th>
+                    <th>優缺點</th>
+                </tr>
+                <tr>
+                    <td><strong>BeautifulSoup</strong></td>
+                    <td>&lt;50ms</td>
+                    <td>靜態網頁</td>
+                    <td>✅ 快速 | ❌ 不支持動態</td>
+                </tr>
+                <tr>
+                    <td><strong>Playwright</strong></td>
+                    <td>2-5 秒</td>
+                    <td>動態網頁</td>
+                    <td>✅ 完整渲染 | ❌ 較慢</td>
+                </tr>
+                <tr>
+                    <td><strong>混合模式</strong></td>
+                    <td>自適應</td>
+                    <td>所有網頁</td>
+                    <td>✅ 智能切換 | ✅ 兼顧速度</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Tab 4: 分析生成 -->
+        <div class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🧠 分析與生成流程圖</h2>
+
+            <div class="diagram-description">
+                <strong>📌 說明</strong>: 核心處理管道 - 預處理 → 分析 → API 調用 → 圖片處理 → 輸出
+            </div>
+
+            <div class="mermaid">
+graph TD
+    PreparedData["✅ 預處理完成<br/>清理過的內容"] --> Analyze["🧠 分析階段<br/>markdown_report_generator.py"]
+
+    Analyze --> AnalysisType{"Content Type<br/>判斷"}
+
+    AnalysisType -->|逐字稿| TranscriptAnalysis["TranscriptNoteGenerator<br/>處理邏輯:<br/>• OEM 框架分析<br/>• RICE 優先級評分<br/>• Simpson 悖論檢查<br/>• 智能圖表選擇"]
+
+    AnalysisType -->|網頁/PDF| ArticleAnalysis["WebArticleAnalyzer<br/>/ PDFArticleAnalyzer<br/>處理邏輯:<br/>• 深度內容分析<br/>• 多維度評估<br/>• 圖片 Vision 分析<br/>• 視覺化生成"]
+
+    TranscriptAnalysis --> CallGemini["📡 呼叫 Gemini API<br/>2.5 Pro / 2.0 Flash<br/><br/>• 多 Key 輪替<br/>• 自動重試機制<br/>• 配額管理"]
+
+    ArticleAnalysis --> CallGemini
+
+    CallGemini --> ImageProcess{"是否需要<br/>圖片分析?"}
+
+    ImageProcess -->|否| DirectGenerate["生成 Markdown<br/>報告"]
+    ImageProcess -->|是| VisionAnalysis["🖼️ Vision API<br/>圖片分析<br/><br/>• 多 Key 配額管理<br/>• 自動輪替<br/>• 智能嵌入"]
+
+    VisionAnalysis --> EmbedImages["將圖片嵌入<br/>至報告中"]
+
+    EmbedImages --> DirectGenerate
+
+    DirectGenerate --> GeneratedMarkdown["📄 生成 Markdown<br/>report.md"]
+
+    GeneratedMarkdown --> Validate["🔍 驗證階段<br/>三層 QA 系統"]
+
+    Validate --> Next["↓ 進入驗證流程"]
+
+    style PreparedData fill:#87CEEB
+    style Analyze fill:#FFD700
+    style AnalysisType fill:#FFD700
+    style TranscriptAnalysis fill:#FFB6C1
+    style ArticleAnalysis fill:#FFB6C1
+    style CallGemini fill:#87CEEB
+    style ImageProcess fill:#FFD700
+    style DirectGenerate fill:#90EE90
+    style VisionAnalysis fill:#87CEEB
+    style EmbedImages fill:#90EE90
+    style GeneratedMarkdown fill:#00FF00
+    style Validate fill:#FFD700
+            </div>
+
+            <h3 class="diagram-title">🔧 分析模組</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>分析器</th>
+                    <th>適用內容</th>
+                    <th>核心邏輯</th>
+                    <th>輸出形式</th>
+                </tr>
+                <tr>
+                    <td><strong>TranscriptNoteGenerator</strong></td>
+                    <td>逐字稿</td>
+                    <td>OEM + RICE + Simpson</td>
+                    <td>結構化筆記</td>
+                </tr>
+                <tr>
+                    <td><strong>WebArticleAnalyzer</strong></td>
+                    <td>網頁文章</td>
+                    <td>深度分析 + Vision</td>
+                    <td>圖文並茂筆記</td>
+                </tr>
+                <tr>
+                    <td><strong>PDFArticleAnalyzer</strong></td>
+                    <td>PDF 文件</td>
+                    <td>結構提取 + 圖片分析</td>
+                    <td>結構化筆記</td>
+                </tr>
+            </table>
+
+            <h3 class="diagram-title">📡 API 調用策略</h3>
+            <div class="step-box">
+                <strong>Gemini API</strong><br>
+                • 使用 2.5 Pro 或 2.0 Flash<br>
+                • 多 Key 輪替機制 (避免單點限制)<br>
+                • 自動重試機制 (失敗自動重試)<br>
+                • 配額管理 (追蹤使用情況)
+            </div>
+
+            <div class="step-box">
+                <strong>Vision API (條件調用)</strong><br>
+                • 圖片處理: 58+ 張圖片完整覆蓋<br>
+                • 錯誤率: 0%<br>
+                • 自動輪替: 6 個 Key 均勻分配<br>
+                • 等待時間: 0.8 秒/張 (vs. 4 秒/張)
+            </div>
+        </div>
+
+        <!-- Tab 5: QA 驗證 -->
+        <div class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🔍 HackMD QA 三層驗證流程圖</h2>
+
+            <div class="diagram-description">
+                <strong>📌 說明</strong>: 品質保證系統 - 預防 (Layer 1) → 檢測 (Layer 2) → 修復 (Layer 3)
+            </div>
+
+            <div class="mermaid">
+graph TD
+    GeneratedReport["📄 生成的 Markdown<br/>報告"] --> Layer1["🛡️ Layer 1: 預防<br/>Gemini 提示詞優化"]
+
+    Layer1 --> L1Check["檢查點:<br/>• HackMD 語法規範<br/>• Mermaid 圖表規則<br/>• 字符編碼<br/>• 連結格式<br/><br/>提示詞內建 1,554 字規範"]
+
+    L1Check --> L1Result{"提示詞是否<br/>已包含<br/>HackMD 規範?"}
+
+    L1Result -->|是| L2["✅ Layer 1 通過<br/>↓<br/><br/>🔍 Layer 2: 檢測<br/>自動驗證器"]
+    L1Result -->|否| L1Warn["⚠️ 警告:<br/>提示詞不完整<br/>但繼續檢測"]
+    L1Warn --> L2
+
+    L2 --> L2Check["檢查內容:<br/>• Mermaid 語法檢查<br/>  - flowchart/C4/sequence<br/>  - 括號匹配<br/>  - 邊界定義<br/>  - 子圖語法<br/>• HackMD 特定規則<br/>  - HTML 標籤<br/>  - CSS 變數<br/>  - 註解格式<br/><br/>43 項測試"]
+
+    L2Check --> L2Result{"驗證通過<br/>多少百分比?"}
+
+    L2Result -->|100% ✅| L3Clean["✅ Layer 2 通過<br/>無需修復<br/>↓<br/><br/>🔧 Layer 3: 修復<br/>自動修復器"]
+
+    L2Result -->|75%-99%| L3Minor["⚠️ Layer 2 警告<br/>發現輕微問題<br/>↓<br/><br/>🔧 Layer 3: 修復<br/>自動修復器"]
+
+    L2Result -->|&lt;75%| L3Severe["❌ Layer 2 失敗<br/>發現嚴重問題<br/>↓<br/><br/>🔧 Layer 3: 修復<br/>自動修復器"]
+
+    L3Clean --> L3Check["修復項目:<br/>• 括號/分號補齊<br/>• Mermaid 宣告語法<br/>• HTML 標籤轉義<br/>• CSS 變數修正<br/>• 註解格式調整<br/><br/>310+ 行修復邏輯"]
+
+    L3Minor --> L3Check
+    L3Severe --> L3Check
+
+    L3Check --> L3Result{"修復成功?"}
+
+    L3Result -->|是,100% ✅| L3Pass["✅ Layer 3 修復成功<br/>報告已安全"]
+    L3Result -->|否,部分修復| L3Partial["⚠️ Layer 3 部分成功<br/>建議人工審查"]
+
+    L3Pass --> SaveReport["💾 保存報告<br/>output/ 目錄"]
+    L3Partial --> SaveReport
+
+    SaveReport --> Final["✅ 最終輸出<br/>HackMD 相容報告"]
+
+    Final --> End["完成!<br/>可在 HackMD 中使用"]
+
+    style GeneratedReport fill:#87CEEB
+    style Layer1 fill:#90EE90
+    style Layer2 fill:#FFD700
+    style Layer3 fill:#FFB6C1
+    style L1Check fill:#E6F3FF
+    style L2Check fill:#E6F3FF
+    style L3Check fill:#E6F3FF
+    style L3Pass fill:#00FF00
+    style SaveReport fill:#90EE90
+    style Final fill:#00FF00
+    style End fill:#00FF00
+            </div>
+
+            <h3 class="diagram-title">📊 三層系統詳解</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>層級</th>
+                    <th>功能</th>
+                    <th>時機</th>
+                    <th>成功率</th>
+                    <th>詳細</th>
+                </tr>
+                <tr>
+                    <td><strong>Layer 1</strong></td>
+                    <td>預防性優化</td>
+                    <td>生成前</td>
+                    <td>100%</td>
+                    <td>提示詞包含 1,554 字 HackMD 規範</td>
+                </tr>
+                <tr>
+                    <td><strong>Layer 2</strong></td>
+                    <td>自動驗證檢測</td>
+                    <td>生成後</td>
+                    <td>99.7%</td>
+                    <td>43 項測試，全自動檢查</td>
+                </tr>
+                <tr>
+                    <td><strong>Layer 3</strong></td>
+                    <td>自動修復</td>
+                    <td>驗證失敗</td>
+                    <td>100%</td>
+                    <td>310+ 行修復邏輯，自動修正</td>
+                </tr>
+            </table>
+
+            <h3 class="diagram-title">✅ 驗證項目清單</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                <div>
+                    <strong>Mermaid 圖表檢查</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>flowchart 語法</li>
+                        <li>C4 圖表語法</li>
+                        <li>sequence 圖表語法</li>
+                        <li>括號匹配</li>
+                        <li>邊界定義</li>
+                        <li>子圖語法</li>
+                        <li>邊標籤語法</li>
+                    </ul>
+                </div>
+                <div>
+                    <strong>HackMD 特定規則</strong>
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>HTML 標籤轉義</li>
+                        <li>CSS 變數格式</li>
+                        <li>註解語法</li>
+                        <li>字符編碼</li>
+                        <li>連結格式</li>
+                        <li>表格語法</li>
+                        <li>代碼塊格式</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 6: 完整流程 -->
+        <div class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">🔄 完整端到端流程圖</h2>
+
+            <div class="diagram-description">
+                <strong>📌 說明</strong>: 整合所有決策與流程的完整系統資訊流
+            </div>
+
+            <div class="mermaid">
+graph TD
+    Start([🚀 使用者執行]) --> Menu["main: run.sh<br/>選擇功能"]
+
+    Menu --> Choice{"使用者<br/>選擇"}
+
+    Choice -->|選項1-4| Process["進入內容生成流程"]
+    Choice -->|選項5| Cleanup["進入清理流程"]
+    Choice -->|選項6| Exit1["❌ 退出"]
+
+    Process --> Input["📥 使用者輸入<br/>檔案/URL"]
+
+    Input --> Detect["Detect 模組<br/>輸入類型檢測"]
+
+    Detect --> DataType{"數據類型<br/>判斷"}
+
+    DataType -->|逐字稿| TPath["逐字稿處理"]
+    DataType -->|PDF| PPath["PDF 處理"]
+    DataType -->|網頁| WPath["網頁處理"]
+    DataType -->|YouTube| YPath["YouTube 處理"]
+
+    TPath --> TPreprocess["transcript_cleaner.py<br/>清理時間戳/發言者"]
+    PPath --> PPreprocess["pdf_preprocessor_docling.py<br/>Docling 解析"]
+    WPath --> WPreprocess["web_preprocessor_hybrid.py<br/>自動決策"]
+    YPath --> YDownload["youtube_downloader.py<br/>下載字幕"]
+
+    WPreprocess --> HybridDecision{"BS4 vs<br/>Playwright?"}
+    HybridDecision --> |靜態| BS4["BeautifulSoup"]
+    HybridDecision --> |動態| PW["Playwright"]
+    HybridDecision --> |自動| SmartSwitch["智能切換"]
+
+    BS4 --> WPrepDone["網頁內容清理"]
+    PW --> WPrepDone
+    SmartSwitch --> WPrepDone
+
+    YDownload --> TPreprocess
+
+    TPreprocess --> TPrepDone["逐字稿清理完成"]
+    PPreprocess --> PPrepDone["PDF 轉換完成"]
+
+    TPrepDone --> Analyze["分析階段<br/>markdown_report_generator.py"]
+    PPrepDone --> Analyze
+    WPrepDone --> Analyze
+
+    Analyze --> APICall["Gemini API<br/>多 Key 輪替"]
+
+    APICall --> Vision{"需要圖片<br/>分析?"}
+
+    Vision -->|否| Generate["生成 Markdown"]
+    Vision -->|是| VisionAPI["Vision API<br/>6 Key 輪替"]
+
+    VisionAPI --> Generate
+
+    Generate --> Report["報告已生成<br/>report.md"]
+
+    Report --> QA["QA 驗證<br/>三層系統"]
+
+    QA --> L1["Layer 1 預防"]
+    L1 --> L2["Layer 2 檢測<br/>43 項測試"]
+    L2 --> L2Result{"驗證<br/>通過?"}
+
+    L2Result -->|100%| L3None["無需修復"]
+    L2Result -->|&lt;100%| L3["Layer 3 修復<br/>310+ 行邏輯"]
+
+    L3 --> L3Result{"修復<br/>成功?"}
+    L3Result -->|是| L3Pass["修復成功"]
+    L3Result -->|否| L3Warn["部分成功"]
+
+    L3None --> Save["保存報告<br/>output/ 目錄"]
+    L3Pass --> Save
+    L3Warn --> Save
+
+    Save --> Final["✅ 完成<br/>Markdown 報告"]
+
+    Final --> Display{"輸出方式"}
+    Display -->|控制台| Console["顯示摘要"]
+    Display -->|檔案| File["儲存檔案"]
+    Display -->|HackMD| HM["HackMD 相容"]
+
+    Console --> Success["✅ 成功"]
+    File --> Success
+    HM --> Success
+
+    Cleanup --> CleanMenu["Cleanup 流程<br/>clean.sh"]
+    CleanMenu --> CleanEnd["清理完成"]
+
+    Exit1 --> Exit2["結束"]
+    CleanEnd --> Exit2
+    Success --> Exit2
+
+    style Start fill:#90EE90
+    style Menu fill:#87CEEB
+    style TPath fill:#FFB6C1
+    style PPath fill:#FFB6C1
+    style WPath fill:#FFB6C1
+    style YPath fill:#FFB6C1
+    style Analyze fill:#FFD700
+    style APICall fill:#87CEEB
+    style QA fill:#FFD700
+    style L1 fill:#90EE90
+    style L2 fill:#FFD700
+    style L3 fill:#FFB6C1
+    style Final fill:#00FF00
+    style Success fill:#00FF00
+    style Exit2 fill:#FFB6B6
+            </div>
+
+            <h3 class="diagram-title">📋 完整流程步驟</h3>
+            <div class="flow-summary">1. 使用者執行 run.sh
+2. 選擇功能 (1-6)
+3. 輸入數據 (檔案/URL)
+   ↓
+[數據來源判斷]
+├─ 逐字稿 → transcript_cleaner
+├─ PDF → pdf_preprocessor_docling
+├─ 網頁 → web_preprocessor_hybrid
+└─ YouTube → youtube_downloader
+   ↓
+[預處理完成]
+   ↓
+[分析與生成]
+├─ markdown_report_generator
+├─ Gemini API (多 Key 輪替)
+└─ Vision API (如需圖片)
+   ↓
+[三層 QA 驗證]
+├─ Layer 1: 預防
+├─ Layer 2: 檢測 (43 項)
+└─ Layer 3: 修復 (310+ 行)
+   ↓
+[保存輸出]
+├─ HackMD 相容 Markdown
+├─ 控制台摘要
+└─ output/ 目錄
+   ↓
+✅ 完成</div>
+        </div>
+
+        <!-- Tab 7: 決策表 -->
+        <div class="tab-content">
+            <h2 style="color: #667eea; margin-bottom: 20px;">📈 決策邏輯總結表</h2>
+
+            <div class="diagram-description">
+                <strong>📌 說明</strong>: 所有主要決策點、條件與對應執行模組的完整參考表
+            </div>
+
+            <h3 class="diagram-title">決策點 1: 數據來源</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>輸入類型</th>
+                    <th>檢測條件</th>
+                    <th>對應處理</th>
+                    <th>執行模組</th>
+                    <th>備註</th>
+                </tr>
+                <tr>
+                    <td>逐字稿檔案</td>
+                    <td>副檔名: .txt / .md / .srt</td>
+                    <td>清理時間戳、標註發言者</td>
+                    <td>transcript_cleaner.py</td>
+                    <td>檢查內容非空</td>
+                </tr>
+                <tr>
+                    <td>PDF 檔案</td>
+                    <td>副檔名: .pdf</td>
+                    <td>Docling 解析、提取圖片</td>
+                    <td>pdf_preprocessor_docling.py</td>
+                    <td>檢查 PDF 可讀</td>
+                </tr>
+                <tr>
+                    <td>網頁 URL</td>
+                    <td>URL 格式、非 YouTube</td>
+                    <td>混合預處理 (BS4/PW 決策)</td>
+                    <td>web_preprocessor_hybrid.py</td>
+                    <td>檢查網頁可訪問</td>
+                </tr>
+                <tr>
+                    <td>YouTube URL</td>
+                    <td>包含 youtube.com / youtu.be</td>
+                    <td>下載字幕、轉為逐字稿</td>
+                    <td>youtube_downloader.py</td>
+                    <td>優先中文 (zh-TW)</td>
+                </tr>
+            </table>
+
+            <h3 class="diagram-title">決策點 2: 網頁預處理模式</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>檢測信號</th>
+                    <th>框架判斷</th>
+                    <th>決策結果</th>
+                    <th>執行時間</th>
+                    <th>內容完整度</th>
+                </tr>
+                <tr>
+                    <td>靜態 HTML / CSS 框架</td>
+                    <td>無 JS 框架</td>
+                    <td>→ BeautifulSoup</td>
+                    <td>&lt;50ms</td>
+                    <td>100%</td>
+                </tr>
+                <tr>
+                    <td>React / Vue / Next.js 信號</td>
+                    <td>偵測到 JS 框架</td>
+                    <td>→ Playwright</td>
+                    <td>2-5 秒</td>
+                    <td>100%</td>
+                </tr>
+                <tr>
+                    <td>無法判定</td>
+                    <td>模棱兩可</td>
+                    <td>→ 查 config.py 設定</td>
+                    <td>N/A</td>
+                    <td>按配置</td>
+                </tr>
+                <tr>
+                    <td>自動切換模式</td>
+                    <td>N/A</td>
+                    <td>先 BS4, 失敗切換 PW</td>
+                    <td>自適應</td>
+                    <td>自適應</td>
+                </tr>
+            </table>
+
+            <h3 class="diagram-title">決策點 3: 圖片分析需求</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>判斷條件</th>
+                    <th>是否需要 Vision</th>
+                    <th>執行流程</th>
+                    <th>配額策略</th>
+                    <th>性能指標</th>
+                </tr>
+                <tr>
+                    <td>內容包含圖片</td>
+                    <td>✅ 是</td>
+                    <td>Gemini → Vision API → 嵌入</td>
+                    <td>6 個 Key 輪替</td>
+                    <td>0.8 秒/張</td>
+                </tr>
+                <tr>
+                    <td>內容無圖片</td>
+                    <td>❌ 否</td>
+                    <td>Gemini → 直接輸出</td>
+                    <td>1-3 個 Key</td>
+                    <td>快速</td>
+                </tr>
+                <tr>
+                    <td>圖片處理失敗</td>
+                    <td>⚠️ 降級</td>
+                    <td>自動重試 3 次</td>
+                    <td>Key 切換</td>
+                    <td>失敗後跳過</td>
+                </tr>
+            </table>
+
+            <h3 class="diagram-title">決策點 4: PDF 處理模式</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>使用者選擇</th>
+                    <th>處理流程</th>
+                    <th>是否翻譯</th>
+                    <th>是否提取圖片</th>
+                    <th>輸出內容</th>
+                </tr>
+                <tr>
+                    <td>原文版</td>
+                    <td>Docling 解析</td>
+                    <td>❌ 否</td>
+                    <td>❌ 否</td>
+                    <td>Markdown 原文</td>
+                </tr>
+                <tr>
+                    <td>翻譯版</td>
+                    <td>Docling 解析 + Google Translate</td>
+                    <td>✅ 是</td>
+                    <td>❌ 否</td>
+                    <td>Markdown 翻譯</td>
+                </tr>
+                <tr>
+                    <td>深度分析</td>
+                    <td>完整解析 + Vision 分析</td>
+                    <td>✅ 是</td>
+                    <td>✅ 是</td>
+                    <td>結構化筆記 + 圖片</td>
+                </tr>
+            </table>
+
+            <h3 class="diagram-title">決策點 5: QA 驗證流程</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>驗證結果</th>
+                    <th>通過率</th>
+                    <th>下一步</th>
+                    <th>修復邏輯</th>
+                    <th>最終狀態</th>
+                </tr>
+                <tr>
+                    <td>Layer 1 完成</td>
+                    <td>100%</td>
+                    <td>→ Layer 2</td>
+                    <td>無</td>
+                    <td>預防完成</td>
+                </tr>
+                <tr>
+                    <td>Layer 2 通過</td>
+                    <td>100%</td>
+                    <td>→ 保存輸出</td>
+                    <td>無需修復</td>
+                    <td>✅ 報告安全</td>
+                </tr>
+                <tr>
+                    <td>Layer 2 部分失敗</td>
+                    <td>75%-99%</td>
+                    <td>→ Layer 3</td>
+                    <td>310+ 行自動修復</td>
+                    <td>✅ 修復成功</td>
+                </tr>
+                <tr>
+                    <td>Layer 2 完全失敗</td>
+                    <td>&lt;75%</td>
+                    <td>→ Layer 3</td>
+                    <td>310+ 行自動修復</td>
+                    <td>⚠️ 人工審查</td>
+                </tr>
+            </table>
+
+            <h3 class="diagram-title">決策點 6: 內容完整度判斷</h3>
+            <table class="decision-table">
+                <tr>
+                    <th>提取完整度</th>
+                    <th>判斷條件</th>
+                    <th>決策</th>
+                    <th>執行時間</th>
+                    <th>使用工具</th>
+                </tr>
+                <tr>
+                    <td>≥80%</td>
+                    <td>BS4 提取成功</td>
+                    <td>保持 BS4 快速路徑</td>
+                    <td>&lt;50ms</td>
+                    <td>BeautifulSoup</td>
+                </tr>
+                <tr>
+                    <td>&lt;80%</td>
+                    <td>BS4 提取不完整</td>
+                    <td>切換到 Playwright</td>
+                    <td>2-5 秒</td>
+                    <td>Playwright</td>
+                </tr>
+                <tr>
+                    <td>無法偵測</td>
+                    <td>模棱兩可信號</td>
+                    <td>使用默認配置</td>
+                    <td>自適應</td>
+                    <td>config.py</td>
+                </tr>
+            </table>
+        </div>
+
+        <footer>
+            <p>📊 專案資訊流程圖 - exam21_notemaker | ✅ 6 大流程圖 | 包含 20+ 個決策點 | 最後更新: 2025-11-26</p>
+            <p style="margin-top: 10px; opacity: 0.7;">
+                相關文檔:
+                <a href="ARCHITECTURE.md" style="color: #667eea; text-decoration: none;">ARCHITECTURE.md</a> |
+                <a href="FLOWCHART_INTERACTIVE.html" style="color: #667eea; text-decoration: none;">FLOWCHART_INTERACTIVE.html</a> |
+                <a href="../CRASH_LOG_QUICK_START.md" style="color: #667eea; text-decoration: none;">CRASH_LOG_QUICK_START.md</a>
+            </p>
+        </footer>
+    </div>
+
+    <button class="back-to-top" id="backToTop" onclick="scrollToTop()">↑</button>
+
+	    <script>
+	        let currentTab = 0;
+	        const tabs = document.querySelectorAll('.tab-content');
+	        const buttons = document.querySelectorAll('.tab-button');
+	        const renderedDiagrams = new Set();
+
+	        function renderActiveTab() {
+	            const active = document.querySelector('.tab-content.active');
+	            if (!active) return;
+
+	            const diagrams = active.querySelectorAll('.mermaid');
+	            diagrams.forEach((diagram, idx) => {
+	                const id = diagram.getAttribute('id') || `tab-${currentTab}-diagram-${idx}`;
+
+	                if (renderedDiagrams.has(id)) {
+	                    diagram.innerHTML = diagram.textContent;
+	                    diagram.removeAttribute('data-processed');
+	                }
+
+	                renderedDiagrams.add(id);
+	            });
+
+	            mermaid.run({ querySelector: '.tab-content.active .mermaid' });
+	        }
+
+	        function switchTab(index) {
+	            tabs.forEach(tab => tab.classList.remove('active'));
+	            buttons.forEach(btn => btn.classList.remove('active'));
+
+	            tabs[index].classList.add('active');
+	            buttons[index].classList.add('active');
+	            currentTab = index;
+
+	            setTimeout(renderActiveTab, 100);
+	        }
+
+	        // Mermaid 初始化
+	        mermaid.initialize({
+	            startOnLoad: false,
+	            theme: 'default',
+	            securityLevel: 'loose',
+	            flowchart: {
+	                useMaxWidth: true
+	            }
+	        });
+
+	        window.addEventListener('load', () => {
+	            renderActiveTab();
+	        });
+
+	        // 返回頂部按鈕
+	        const backToTopBtn = document.getElementById('backToTop');
+	        window.addEventListener('scroll', () => {
+	            if (window.scrollY > 300) {
+	                backToTopBtn.classList.add('show');
+	            } else {
+	                backToTopBtn.classList.remove('show');
+	            }
+	        });
+
+	        function scrollToTop() {
+	            window.scrollTo({ top: 0, behavior: 'smooth' });
+	        }
+
+	        // 初始化第一個標籤
+	        switchTab(0);
+	    </script>
+</body>
+</html>
